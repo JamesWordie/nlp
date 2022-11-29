@@ -5,6 +5,7 @@ from collections import OrderedDict
 import copy
 from nltk.corpus import brown
 import math
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 '''
 # DENSE PASSAGE RETRIEVAL - RETRIEVAL METHOD
@@ -275,6 +276,7 @@ query = "How long does it take to get to the store?"
 query_vec = copy.copy(zero_vector)
 tokens = tokenizer.tokenize(query.lower())
 token_counts = Counter(tokens)
+# print(token_counts)
 
 for key, value in token_counts.items():
   docs_containing_key = 0
@@ -300,6 +302,68 @@ def cosine_sim(vec1, vec2):
 
   return dot_prod / (mag_1 * mag_2)
 
-print(cosine_sim(query_vec, document_tfidf_vectors[0]))
-print(cosine_sim(query_vec, document_tfidf_vectors[1]))
-print(cosine_sim(query_vec, document_tfidf_vectors[2]))
+# print('vec1', query_vec)
+# OrderedDict([
+#   (',', 0),
+#   ('.', 0),
+#   ('and', 0),
+#   ('as', 0),
+#   ('faster', 0),
+#   ('get', 0.2727272727272727),
+#   ('got', 0),
+#   ('hairy', 0),
+#   ('harry', 0),
+#   ('home', 0),
+#   ('is', 0),
+#   ('jill', 0),
+#   ('not', 0),
+#   ('store', 0.2727272727272727),
+#   ('than', 0),
+#   ('the', 0.2727272727272727),
+#   ('to', 0.5454545454545454),
+#   ('would', 0)
+# ])
+# print('vec2', document_tfidf_vectors[0])
+# OrderedDict([
+#   (',', 0.16666666666666666),
+#   ('.', 0.05555555555555555),
+#   ('and', 0.08333333333333333),
+#   ('as', 0),
+#   ('faster', 0.25),
+#   ('get', 0.16666666666666666),
+#   ('got', 0.16666666666666666),
+#   ('hairy', 0),
+#   ('harry', 0.0),
+#   ('home', 0.16666666666666666),
+#   ('is', 0),
+#   ('jill', 0),
+#   ('not', 0),
+#   ('store', 0.16666666666666666),
+#   ('than', 0),
+#   ('the', 0.5),
+#   ('to', 0.16666666666666666),
+#   ('would', 0.16666666666666666)
+# ])
+
+# print(cosine_sim(query_vec, document_tfidf_vectors[0]))
+# print(cosine_sim(query_vec, document_tfidf_vectors[1]))
+# print(cosine_sim(query_vec, document_tfidf_vectors[2]))
+# From results you can assume document 1 has the most relevance to the query
+# 0.6132857433407973
+# 0.0
+# 0.0
+
+# Do the above but using scipy and sklearn
+corpus = docs
+vectorizer = TfidfVectorizer(min_df=1)
+model = vectorizer.fit_transform(corpus)
+# print(model.todense().round(2))
+'''TFIDF matrix of the tree docs
+A matrix of your three documents and the inverse document frequency for each term in the lexicon
+The TF-IDF of each term, token, or word in your lexicon make up the columns of the matrix (or again, the indices of each row)
+'''
+# [
+#   [0.16 0. 0.48 0.21 0.21 0. 0.25 0.21 0. 0. 0. 0.21 0. 0.64 0.21 0.21]
+#   [0.37 0. 0.37 0. 0. 0.37 0.29 0. 0.37 0.37 0. 0. 0.49 0. 0. 0.]
+#   [0. 0.75 0. 0. 0. 0.29 0.22 0. 0.29 0.29 0.38 0. 0. 0. 0. 0.]
+# ]
