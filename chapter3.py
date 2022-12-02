@@ -1,10 +1,10 @@
+import nltk
+import copy
+import math
 from nltk.tokenize import TreebankWordTokenizer
 from collections import Counter
-import nltk
 from collections import OrderedDict
-import copy
 from nltk.corpus import brown
-import math
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 '''
@@ -271,7 +271,7 @@ Two vectors are considered similar if their cosine similarity is high
 cosΘ = A·B / |A||B|
 '''
 
-# Basic TFIDF Search
+# Basic TFIDF Search - cosine similarity
 query = "How long does it take to get to the store?"
 query_vec = copy.copy(zero_vector)
 tokens = tokenizer.tokenize(query.lower())
